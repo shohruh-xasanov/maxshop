@@ -12,7 +12,8 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type:String,
-        unique: true
+        unique: true,
+        required:true
     },
     address:{
         type:String,
@@ -20,14 +21,13 @@ const userSchema = mongoose.Schema({
     password:{
         type:String,
         required:true,
-        unique:true
     },
     isActive:{
         type:Boolean,
         default:false
     },
     uid:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
     },
@@ -52,3 +52,4 @@ userSchema.pre('save', async function(next){
 userSchema.methods.matchPassword = async (enteredPassword)=>{
     return await  bcrypt.compare( enteredPassword, this.password);
 }
+module.exports = mongoose.model('User', userSchema)
