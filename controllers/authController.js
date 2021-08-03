@@ -18,25 +18,27 @@ exports.super_admin = async (req,res,next)=>{
 
 exports.login = async (req,res,next)=>{
     const {email, password} = req.body
-    if (!email || !password) {
-      res.redirect("/admin/login");
+    if (!email && !password) {
+      res.redirect("/api/auth/login");
     }
     await User.findOne({email}, (err,user)=>{
         if(err){
-            return res.status(403).redirect("/admin/login");
+            return res.status(403).redirect("/api/auth/login");
         }
         if(!email){
-        return res.status(404).redirect("/admin/login");
+        return res.status(404).redirect("/api/auth/login");
         }
         user.matchPassword(password, (err, isMatch)=>{
-            if(err) throw err;
+            if(err){
+               return res.redirect('/api/auth/login')
+            }
             if (!isMatch) {
-                res.status(404).json({msg:"Password xato"})
+               return res.status(404).redirect('/api/auth/login')
               }else{
                   req.session.admin = user;
                   req.session.isAuth = true;
                   req.session.save()
-                  res.status(200).json(user)
+                  res.redirect('/api/admin/dashboard')
               }
         });
     })
@@ -45,7 +47,7 @@ exports.login = async (req,res,next)=>{
 exports.logout = async (req,res,next)=>{
     req.session.destroy();
     res.clearCookie("connect.sid");
-    res.redirect('/admin/login')
+    res.redirect('/api/auth//login')
 }
 
 exports.getOne = async (req, res, next) => {
@@ -57,6 +59,15 @@ exports.getOne = async (req, res, next) => {
 exports.elementDelete = async (req,res,next)=>{
     await User.findByIdAndDelete({_id:req.params.id})
     res.redirect('/api/admin/dashboard')
+}
+
+exports.adminLogin = async (req,res,next)=>{
+    if(req.session.admin){
+        res.redirect('/api/admin/dashboard')
+    }if(req.session.user){
+        res.redirect('/')
+    }
+    res.render('admin/login/index', {layout:false})
 }
 
 exports.updateOne = async (req,res,next)=>{

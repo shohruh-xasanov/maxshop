@@ -14,9 +14,9 @@ exports.addChegirma = async (req,res,next)=>{
           product.save();
         
           await result.save()
-          res.status(201).json({result})
+          res.redirect('/api/chegirma/all')
     } catch (error) {
-        
+        return res.status(500).json({msg:error.message})
     }
 }
 
@@ -26,7 +26,7 @@ exports.getAll = async (req,res,next)=>{
         path: "productID",
         select: ["prev_payment", "price", "name"],
       })
-      .sort({ date: -1 });
+      .sort({createdAt:-1})
     const user = req.session.admin
     const product = await Product.find()
     res.render('admin/chegirma/index',{layout:'./admin_layout', user, product, result})
@@ -35,14 +35,14 @@ exports.getAll = async (req,res,next)=>{
 exports.deleteChegirma = async (req,res,next)=>{
     const result = await Chegirma.findById({_id:req.params.id})
   .populate({
-    path: "product_ID",
+    path: "productID",
     select: ["prev_payment", "price", "title"],
   });
-  const course = await Product.findByIdAndUpdate(result.product_ID._id);
+  const course = await Product.findByIdAndUpdate(result.productID._id);
   course.price = course.prev_payment 
   course.prev_payment = 0
   course.chegirma = 0
   course.save()
   await Chegirma.findByIdAndDelete({ _id: req.params.id })
-  res.send('Chegirma o\'chirildi')
+  res.redirect('/api/chegirma/all')
 }

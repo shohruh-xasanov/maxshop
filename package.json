@@ -4,21 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shohruh-xasanov/springoo.git"
+    "url": "git+https://github.com/shohruh-xasanov/maxshop.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shohruh-xasanov/springoo/issues"
+    "url": "https://github.com/shohruh-xasanov/maxshop/issues"
   },
-  "homepage": "https://github.com/shohruh-xasanov/springoo#readme",
+  "homepage": "https://github.com/shohruh-xasanov/maxshop#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
     "connect-mongodb-session": "^3.0.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

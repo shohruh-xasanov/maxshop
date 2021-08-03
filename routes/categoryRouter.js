@@ -1,0 +1,10 @@
+const router = require('express').Router()
+const {addCategory, getAll,getById,elemntDelete,updateCategory} = require('../controllers/categoryController')
+const {isAdminAuth} = require('../middleware/auth')
+router.post('/create', isAdminAuth, addCategory)
+router.get('/all',isAdminAuth, getAll)
+router.route('/:id')
+    .get(isAdminAuth,getById)
+    .put(isAdminAuth,updateCategory)
+    .delete(isAdminAuth,elemntDelete)
+module.exports = router

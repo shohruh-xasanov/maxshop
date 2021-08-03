@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
 const categorySchema = mongoose.Schema({
     name:{
-        type:String,
+        uz:{type:String, required:true},
+        ru:{type:String, required:true}
+    },
+    typeID:{
+        type:mongoose.Schema.ObjectId,
+        ref:'Type',
         required:true
     }
 },{

@@ -1,0 +1,394 @@
+<style>
+  .file-upload {
+    background-color: #ffffff;
+    width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+
+  .file-upload-btn {
+    width: 100%;
+    margin: 0;
+    color: #fff;
+    background: #30419b;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    border-bottom: 4px solid #30419b;
+    transition: all 0.2s ease;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .file-upload-btn:hover {
+    background: #30419b;
+    color: #ffffff;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .file-upload-btn:active {
+    border: 0;
+    transition: all 0.2s ease;
+  }
+
+  .file-upload-content {
+    display: none;
+    text-align: center;
+  }
+
+  .file-upload-input {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .image-upload-wrap {
+    margin-top: 20px;
+    border: 4px dashed #30419b;
+    position: relative;
+  }
+
+  .image-dropping,
+  .image-upload-wrap:hover {
+    background-color: #30419b;
+  }
+
+  .image-title-wrap {
+    padding: 0 15px 15px 15px;
+    color: #222;
+  }
+
+  .drag-text {
+    text-align: center;
+  }
+
+  .drag-text h3 {
+    font-weight: 100;
+    text-transform: uppercase;
+    color: #000;
+    padding: 60px 0;
+  }
+
+  .file-upload-image {
+    max-height: 300px;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .remove-image {
+    width: 400px;
+    margin: 0;
+    color: rgb(0, 0, 0);
+    background: #30419b;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    border-bottom: 4px solid #30419b;
+    transition: all 0.2s ease;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .remove-image:hover {
+    background: #30419b;
+    color: #ffffff;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .remove-image:active {
+    border: 0;
+    transition: all 0.2s ease;
+  }
+</style>
+  <div class="row">
+    <div class="col-12">
+      <div style="
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        ">
+        <h4 class="m-3" style="font-weight: 700">Mahsulotlar ro'yhati</h4>
+        <button type="button" class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+          data-target=".bs-example-modal-lg">
+          Yaratish
+        </button>
+      </div>
+   
+  
+      <div class="card col-md-12 table-responsive">
+        <div class="card-body table-responsive">
+          <table
+            id="datatable"
+            class="table table-bordered text-center "
+            style="border-collapse: collapse; border-spacing: 0; width: 200%; flex-wrap: wrap;"
+          >
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th style="width: 20%">Tasnif</th>
+                <th style="width: 10%">Color</th>
+                <th>Size</th>
+                <th>Kategoriyasi</th>
+                <th>Sotilganlar soni</th>
+                <th>Narxi</th>
+                <th style="width: 10%">Chegirma</th>
+                <th  >Yaratilgan sana</th>
+                <th style="width: 8%">Sozlamalar</th>
+              </tr>
+            </thead><tbody>
+              <% for(let item of product) {%>
+                <tr>
+                  <td>
+                    <div>
+                        <img src="<%=item.poster%>" alt="" class="thumb-md rounded-circle mr-2">
+                    </div>
+                </td>
+                  <td>
+                    <%= item.name.uz %>
+                  </td>
+                  <td>
+                    <%= item.description.uz %>
+                  </td>
+                  <td>
+
+                    <%  if (item.colorID) {%>
+                      <% for(let c of item.colorID) {%>
+                        <%  if (c) {%>
+                         <%= c.name %> <br/>
+                         <%} else {%>
+                           Yo'q <br/>
+                       <%}}%>
+                      <%} else {%>
+                        Yo'q <br/>
+                        <%}%>
+                  </td>
+                  <td>
+                    <%= item.size %>
+                  </td>
+                  <td>
+                    <%= item.categoryID.name.uz %>
+                  </td>
+                  <td>
+                    <%= item.price %>   
+                    <td>
+                      300000
+                    </td>
+                  </td>
+                  <td>
+                    <%= item.chegirma %>
+                  </td>
+                  <td>
+                    <%= moment(item.createdAt).format("DD-MM-YYYY - hh:mm:ss") %>
+                  </td>
+                  <td style="
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    align-items: center;
+                  ">
+                    <a class="btn btn-warning" href="<%=`/api/product/edit/${item._id}`%>">
+                      <i class="icofont-binary"></i>
+                    </a>
+                    <form method="POST"  action="<%=`/api/product/${item._id}?_method=DELETE`%>">
+                      <button type="submit" class="btn btn-danger">
+                        <i class="icofont-bin"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>                       
+          <div class="pagination-wrap">
+          <ul>
+              <li class="prev"><a href="#">Prev</a></li>
+              <li><a href="#">1</a></li>
+              <li class="active"><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">...</a></li>
+              <li><a href="#">10</a></li>
+              <li class="next"><a href="#">Next</a></li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- end col -->
+  </div>
+  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title mt-0" id="myLargeModalLabel">Yaratish</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form action="/api/product/create" method="POST"  ref='uploadForm' encType="multipart/form-data">
+            <div class="mb-3">
+              <label for="">Name </label>
+              <input type="text" name="nameuz" class="form-control"  />
+            </div>
+            <div class="mb-3">
+              <label for="">Название </label>
+              <input type="text" name="nameru" class="form-control"  />
+            </div>
+            <div class="mb-3">
+              <label for="">Tafsifi </label>
+              <input type="text" name="descriptionuz" class="form-control"  />
+            </div>
+            <div class="mb-3">
+              <label for="">Описание </label>
+              <input type="text" name="descriptionru" class="form-control"  />
+            </div>
+
+            
+
+            <div class="form-group mb-4">
+            <label for=""  class="mb-2 black bold d-block" >Kerakli kategoriyalarni tanlang</label>
+            <select name="categoryID" class="theme-input-style" value="" >
+              <div class="custom-select style--two">
+                <option style="font-weight:100">Tanlash ...</option>
+                <% for (let item of category) {%>
+                <option value="<%= item._id %>"><%= item.name.uz %></option>
+                <% } %>
+              </div>
+            </select>
+            </div>
+            
+            <div class="form-group mb-4">
+              <label for=""  class="mb-2 black bold d-block" >Kerakli Brandni tanlang</label>
+              <select name="brandID" class="theme-input-style" value="" id="">
+                <div class="custom-select style--two">
+                  <option value="61094c432e1d1b2b80c6dab0" style="font-weight:100">Tanlash ...</option>
+                  <% for (let item of brand) {%>
+                  <option value="<%= item._id %>"><%= item.name.uz %></option>
+                  <% } %>
+                </div>
+              </select>
+              </div>
+
+              <div class="form-group mb-4">
+                <label for=""  class="mb-2 black bold d-block" >Kerakli Tipni tanlang</label>
+                <select name="typeID" class="theme-input-style" value="" id="">
+                  <div class="custom-select style--two">
+                    <option style="font-weight:100">Tanlash ...</option>
+                    <% for (let item of type) {%>
+                    <option value="<%= item._id %>"><%= item.name.uz %></option>
+                    <% } %>
+                  </div>
+                </select>
+                </div>
+
+            <div class="mb-3">
+              <label for="">Price </label>
+              <input type="number" name="price" class="form-control"  />
+            </div>
+            <div class="mb-3">
+              <label for="">Size </label>
+              <input type="text" name="size" class="form-control"  />
+            </div>
+
+           
+            <div class="form-group mb-4" >
+              <label for="exampleSelect2" class="mb-2 black bold d-block">Kerakli ranglarni tanlang</label>
+              <select name="colorID" class="theme-input-style multiple" value="" id="filterTheme" data-placeholder="multiple-select" multiple="multiple">
+                  <option style="font-weight: bold">Tanlash ...</option>
+                  <% for (let item of color) {%>
+                  <option value="<%= item._id %>"><%= item.name %></option>
+                  <% } %>
+              </select>
+              </div>
+          <div class="input-group mt-2 mb-2" >
+            <label for="">Kerakli Gender turini tanlang</label>
+            <select name="gender" class="theme-input-style" value="" id="filterTheme"  >
+              <div class="custom-select style--two">
+                <option value="0">null</option>
+                <option value="man">Erkaklarniki</option>
+                <option value="woman">Ayollarniki</option>
+            </select>
+            </div>
+         </div>
+
+          <div class="mb-3">
+            <div class="input-group mb-3 pb-3 mt-2">
+              <div class="file-upload">
+                <div class="image-upload-wrap">
+                  <input name="images" class="file-upload-input" class="form-control" type="file" onchange="readURL(this);" multiple />
+                  <div class="drag-text">
+                    <h3>Rasm tanlang</h3>
+                  </div>
+                </div>
+                <div class="file-upload-content">
+                  <img class="file-upload-image" src="<%= product.image%>" />
+                  <div class="image-title-wrap">
+                    <button type="button" onclick="removeUpload()" class="remove-image">
+                      Remove <span class="image-title">Uploaded Image</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+ <script>
+   function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $(".image-upload-wrap").hide();
+
+        $(".file-upload-image").attr("src", e.target.result);
+        $(".file-upload-content").show();
+
+        $(".image-title").html(input.files[0].name);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      removeUpload();
+    }
+  }
+
+  function removeUpload() {
+    $(".file-upload-input").replaceWith($(".file-upload-input").clone());
+    $(".file-upload-content").hide();
+    $(".image-upload-wrap").show();
+  }
+  $(".image-upload-wrap").bind("dragover", function () {
+    $(".image-upload-wrap").addClass("image-dropping");
+  });
+  $(".image-upload-wrap").bind("dragleave", function () {
+    $(".image-upload-wrap").removeClass("image-dropping");
+  });
+
+ </script>
+ </div>
+</div>
